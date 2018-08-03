@@ -66,4 +66,15 @@ server.delete('/projects/:id', (req, res) => {
     });
 });
 
+server.post('projects/:id', (req, res) => {
+  const proj = req.body;
+  projectModel.insert(proj);
+  .then((response) => {
+    res.status(201).json(proj);
+  })
+  .catch(() => {
+    res.status(500).json({ error: 'There was an error saving/posting to the database.'});
+  })
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));

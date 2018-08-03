@@ -1,0 +1,8 @@
+{
+  "name": "Sprint-Node-Express",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/Tmbrwolf/Sprint-Challenge-Node-Express.git",
+  "author": "Tmbrwolf",
+  "license": "IRQ"
+}

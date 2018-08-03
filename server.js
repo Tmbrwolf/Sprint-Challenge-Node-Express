@@ -66,9 +66,77 @@ server.delete('/projects/:id', (req, res) => {
     });
 });
 
-server.post('projects/:id', (req, res) => {
+server.post('projects/', (req, res) => {
   const proj = req.body;
   projectModel.insert(proj);
+  .then((response) => {
+    res.status(201).json(proj);
+  })
+  .catch(() => {
+    res.status(500).json({ error: 'There was an error saving/posting to the database.'});
+  })
+});
+
+/* Action endpoints */
+server.get('/actions', (req, res) => {
+  actionModel.get()
+  .then(response => {
+    res.json(response)
+  })
+  .catch(() => {
+    res.status(500).json({ error: "The actions data could not be retrieved."})
+  })
+})
+
+server.get('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  actionModel.get(id)
+    .then(response => {
+      if (response.length < 1) {
+        res.status(404).json({ message: 'The action with specified ID does not exist.' })
+      } else {
+        res.json(response)
+      }
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'The individual action ID for ID: ${id} info could not be retrieved.' })
+    })
+});
+
+server.put('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  // const { name, description } = req.body;
+  const actBody = req.body;
+  actionModel.update(id, actBody)
+    .then(response => {
+      if (response.length < 1) {
+        res.status(404).json({ message: 'The action with specified ID does not exist. Database not updated.'})
+      }
+      res.status(200).json(projBody);
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'The action information could not be modified.'})
+    })
+});
+
+server.delete('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  actionModel.remove(id)
+    .then((response) => {
+      if (response < 1) {
+        res.status(404).json({ message: 'The specified project does not exist - Not updated/removed' });
+      } else {
+        res.status(200).json(response);
+      }
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'The project was not deleted.' });
+    })
+});
+
+server.post('/actions', (req, res) => {
+  const proj = req.body;
+  actionsModel.insert(proj);
   .then((response) => {
     res.status(201).json(proj);
   })
